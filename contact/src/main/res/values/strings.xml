@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World!</string>
+    <string name="app_name">我的通讯录</string>
+	<string name="carol">carol</string>
+    <string name="svn_version">代码版本号：778</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">邮箱</string>
+    <string name="prompt_password">密码</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">密码太短</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">不能为空</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="mobile_ask">请输入11位手机号</string>
+    <string name="name_limit_char">_0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLIMNOPQRSTUVWXYZ</string>
+    <string name="password_ask">密码由6-18位数字、字母及下划线组成</string>
+    <string name="password_repeat">再输入一次密码</string>
+
+    <string name="verify_code">暂时输入123456</string>
+    <string name="agreement">用户协议</string>
+    <string name="user_regist">注册</string>
+    <string name="mobile_empty">手机号不能为空</string>
+    <string name="mobile_length">请输入11位有效手机号码</string>
+    <string name="password_empty">密码不能为空</string>
+    <string name="password_length">请输入6至18位密码</string>
+    <string name="mobile_old_empty">原手机号不能为空</string>
+    <string name="mobile_new_empty">新手机号不能为空</string>
+    <string name="change_mobile_info">验证码将发送到您的新手机号上。</string>
+    <string name="verify_code_empty">验证码不能为空</string>
+    <string name="recommended_code_empty">推荐码不能为空</string>
+    <string name="verify_code_length">验证码长度必须为6位</string>
+    <string name="user_agreement_uncheck">用户服务协议未选</string>
+    <string name="verify_code_sent">验证码已发送</string>
+    <string name="pasword_different">您两次输入的密码不一致！</string>
+    <string name="mobile_same">两次手机号一致，不能进行手机号修改！</string>
+    <string name="local_verify_code_empty">验证码不能为空</string>
+    <string name="local_verify_code_no_right">验证码不能正确</string>
+    <string name="password_forget">忘记密码？</string>
+    <string name="login">登录</string>
+    <string name="contactsList">Contacts</string>
+    <!-- Dialog message shown when reading a VCard file -->
+    <string name="reading_vcard_message">正在读取Vcard文件</string>
+    <string name="import_one_vcard_string">导入一张vCard 文件</string>
+    <!-- "Import more than one vCard -->
+    <string name="import_multiple_vcard_string">导入多张vCard 文件</string>
+    <!-- "Import all vCard files" -->
+    <string name="import_all_vcard_string">导入所有vCard 文件</string>
+    <!-- Dialog message shown when searching VCard data from SD Card -->
+    <string name="searching_vcard_message">Searching for vCard data on SD card</string>
+    <!-- Dialog title shown when searching VCard data failed. -->
+    <string name="scanning_sdcard_failed_title">没有找到vCard</string>
+    <!-- The failed reason: "I/O Error" -->
+    <string name="fail_reason_io_error">I/O Error</string>
+    <!-- The failed reason: "Failed to parse VCard data" -->
+    <string name="fail_reason_vcard_parse_error">Failed to parse vCard for unexpected reason</string>
+    <!-- The failed reason: "The VCard is not supported right now, but may be supported in the future" -->
+    <string name="fail_reason_vcard_not_supported_error">Failed to parse vCard though it seems in valid format, since the current implementation does not support it</string>
+    <!-- The failed reason: "There is no VCard file" -->
+    <string name="fail_reason_no_vcard_file">No vCard file found on the SD card</string>
+    <!-- The failed reason: "There is no valid VCard entry in the file(s)" -->
+    <string name="fail_reason_no_vcard_entry">No valid vCard entry found for your selection</string>
+    <!-- The failed reason: "One or more files failed to be imported. (<a list of file names>)" -->
+    <string name="fail_reason_failed_to_read_files">One or more files failed to be imported (%s).</string>
+
+    <string name="fail_reason_unknown">Unknown error</string>
+    <!-- Dialog title shown when a user is asked to select VCard file -->
+    <string name="select_vcard_title">选择VCard文件</string>
+    <!-- Dialog message shown when a user is asked to choose VCard file -->
+    <string name="select_vcard_message">Please select a vCard file to import</string>
+    <string name="scanning_sdcard_failed_message">Scanning SD card failed </string>
+    <string name="reading_vcard_title">正在读取vcard</string>
+    <string name="progress_shower_message"/>
+    <string name="exit">退出</string>
+    <string name="cancle">取消</string>
+</resources>
