@@ -178,7 +178,7 @@ public class NewSMSActivity extends Activity {
 		getWindowManager().getDefaultDisplay().getMetrics(metric);
 		/**********************************************************************************************/
 		mvg = new MyViewGroup(NewSMSActivity.this);   
-		mvg.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, 70));
+		mvg.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, 80));
 		//		mvg.setBackgroundColor(Color.GREEN);
 		etMess = new EditText(NewSMSActivity.this);
 		etMess.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});

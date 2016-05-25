@@ -23,10 +23,5 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile files('libs/gson-1.5.jar')
-    compile files('libs/pinyin4j-2.5.0.jar')
-    compile files('libs/xUtils-2.6.8.jar')
-    compile files('libs/mail.jar')
-    compile files('libs/activation.jar')
     compile 'com.android.support:support-v4:23.3.0'
 }

@@ -2,7 +2,7 @@
 <resources>
 
     <string name="hello">Hello World!</string>
-    <string name="app_name">小腾通讯录</string>
+    <string name="app_name">小滕通讯录</string>
 	<string name="carol">carol</string>
     <string name="svn_version">代码版本号：1</string>
     <!-- Strings related to login -->

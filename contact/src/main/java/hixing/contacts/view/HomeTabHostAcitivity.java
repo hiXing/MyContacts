@@ -96,7 +96,7 @@ public class HomeTabHostAcitivity extends TabActivity {
 		setIndicator("信息", 2, new Intent(this, HomeSMSActivity.class), R.drawable.tab_sms_normal);
 		setIndicator("我的", 3, new Intent(this, HomeSettintActivity.class), R.drawable.tab_settings_normal);
 		mTabHost.setOpenAnimation(true);
-//		onPageSelected(1);
+		onPageSelected(3);
 	}
 
 	private void setIndicator(String ss, int tabId, Intent intent, int image_id) {

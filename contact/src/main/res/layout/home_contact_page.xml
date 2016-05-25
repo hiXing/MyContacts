@@ -49,7 +49,7 @@
             android:visibility="visible" />
     </hixing.contacts.view.ui.SlidingLinearLayout>
 
-    <hixing.contacts.view.ui.QuickAlphabeticBar
+    <!--<hixing.contacts.view.ui.QuickAlphabeticBar
         android:id="@+id/fast_scroller"
         android:layout_width="22dp"
         android:layout_height="fill_parent"
@@ -59,7 +59,7 @@
         android:layout_marginTop="0dip"
         android:background="#11000000"
         android:scaleType="centerInside"
-        android:src="@drawable/dic_background" />
+        android:src="@drawable/dic_background" />-->
 
     <TextView
         android:id="@+id/fast_position"

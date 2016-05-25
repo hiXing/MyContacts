@@ -8,7 +8,7 @@ public class MyViewGroup extends ViewGroup {
 
 	private final static int VIEW_MARGIN = 2;
 	private int maxWidth = 0;
-	private int maxHeight = 60;
+	private int maxHeight = 100;
 
 	public MyViewGroup(Context context) {
 		super(context);

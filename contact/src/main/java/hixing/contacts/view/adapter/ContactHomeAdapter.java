@@ -55,6 +55,28 @@ public class ContactHomeAdapter extends BaseAdapter{
 
 		alpha.setAlphaIndexer(alphaIndexer);
 	}
+	public ContactHomeAdapter(Context context, List<ContactBean> list) {
+
+		this.ctx = context;
+		this.inflater = LayoutInflater.from(context);
+		this.list = list;
+		this.alphaIndexer = new HashMap<String, Integer>();
+		this.sections = new String[list.size()];
+
+		for (int i =0; i <list.size(); i++) {
+			String name = getAlpha(list.get(i).getSortKey());
+			if(!alphaIndexer.containsKey(name)){
+				alphaIndexer.put(name, i);
+			}
+		}
+
+		Set<String> sectionLetters = alphaIndexer.keySet();
+		ArrayList<String> sectionList = new ArrayList<String>(sectionLetters);
+		Collections.sort(sectionList);
+		sections = new String[sectionList.size()];
+		sectionList.toArray(sections);
+
+	}
 
 	@Override
 	public int getCount() {
@@ -106,14 +128,14 @@ public class ContactHomeAdapter extends BaseAdapter{
 			Bitmap contactPhoto = BitmapFactory.decodeStream(input);
 			holder.qcb.setImageBitmap(contactPhoto);
 		}
-		// ��ǰ��ϵ�˵�sortKey
+		// sortKey
 		String currentStr = getAlpha(cb.getSortKey());
-		// ��һ����ϵ�˵�sortKey
+		//sortKey
 		String previewStr = (position - 1) >= 0 ? getAlpha(list.get(position - 1).getSortKey()) : " ";
 		/**
-		 * �ж���ʾ#��A-Z��TextView������ɼ�
+		 *
 		 */
-		if (!previewStr.equals(currentStr)) { // ��ǰ��ϵ�˵�sortKey��=��һ����ϵ�˵�sortKey��˵����ǰ��ϵ�������顣
+		if (!previewStr.equals(currentStr)) {
 			holder.alpha.setVisibility(View.VISIBLE);
 			holder.alpha.setText(currentStr);
 		} else {
@@ -130,7 +152,7 @@ public class ContactHomeAdapter extends BaseAdapter{
 	}
 	
 	/**
-	 * ��ȡӢ�ĵ�����ĸ����Ӣ����ĸ��#���档
+	 *
 	 * 
 	 * @param str
 	 * @return
@@ -143,10 +165,10 @@ public class ContactHomeAdapter extends BaseAdapter{
 			return "#";
 		}
 		char c = str.trim().substring(0, 1).charAt(0);
-		// ������ʽ���ж�����ĸ�Ƿ���Ӣ����ĸ
+
 		Pattern pattern = Pattern.compile("^[A-Za-z]+$");
 		if (pattern.matcher(c + "").matches()) {
-			return (c + "").toUpperCase(); // ��д���
+			return (c + "").toUpperCase();
 		} else {
 			return "#";
 		}

@@ -25,7 +25,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -82,7 +81,7 @@ public class HomeContactActivity extends Activity {
 	private ListView personList;
 	private List<ContactBean> list;
 	private AsyncQueryHandler asyncQuery;
-	private QuickAlphabeticBar alpha;
+//	private QuickAlphabeticBar alpha;
 	private ImageButton addContactBtn;
 
 	private Map<Integer, ContactBean> contactIdMap = null;
@@ -153,7 +152,7 @@ public class HomeContactActivity extends Activity {
 
 		personList = (ListView) this.acbuwaPage.findViewById(R.id.acbuwa_list);
 
-		alpha = (QuickAlphabeticBar) this.acbuwaPage.findViewById(R.id.fast_scroller);
+//		alpha = (QuickAlphabeticBar) this.acbuwaPage.findViewById(R.id.fast_scroller);
 		asyncQuery = new MyAsyncQueryHandler(getContentResolver());
 		init();
 
@@ -282,12 +281,13 @@ public class HomeContactActivity extends Activity {
 
 
 	private void setAdapter(List<ContactBean> list) {
-		adapter = new ContactHomeAdapter(this, list, alpha);
+		adapter = new ContactHomeAdapter(this, list);
+//		adapter = new ContactHomeAdapter(this, list, alpha);
 		personList.setAdapter(adapter);
-		alpha.init(HomeContactActivity.this);
-		alpha.setListView(personList);
-		alpha.setHight(alpha.getHeight());
-		alpha.setVisibility(View.VISIBLE);
+//		alpha.init(HomeContactActivity.this);
+//		alpha.setListView(personList);
+//		alpha.setHight(alpha.getHeight());
+//		alpha.setVisibility(View.VISIBLE);
 		personList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				ContactBean cb = (ContactBean) adapter.getItem(position);
