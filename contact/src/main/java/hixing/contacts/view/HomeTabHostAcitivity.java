@@ -1,6 +1,7 @@
 package hixing.contacts.view;
 
 import hixing.contacts.R;
+import hixing.contacts.application.MyApplication;
 import hixing.contacts.uitl.SystemScreenInfo;
 import hixing.contacts.view.ui.AnimationTabHost;
 import android.app.TabActivity;
@@ -132,11 +133,11 @@ public class HomeTabHostAcitivity extends TabActivity {
 		cursor.startAnimation(animation);
 	}
 
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	/*public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
 		}
 		return false;
-	}
+	}*/
 
 	protected void onDestroy() {
 		super.onDestroy();

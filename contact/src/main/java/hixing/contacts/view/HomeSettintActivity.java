@@ -1,6 +1,7 @@
 package hixing.contacts.view;
 
 import hixing.contacts.R;
+import hixing.contacts.application.MyApplication;
 import hixing.contacts.uitl.PropertiesUtil;
 
 import android.app.Activity;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -294,6 +296,13 @@ public class HomeSettintActivity extends Activity {
 		return "";
 	}
 
-
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			((MyApplication) getApplication()).promptExit(this);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
 }

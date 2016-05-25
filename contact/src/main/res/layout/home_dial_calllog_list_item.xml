@@ -31,14 +31,14 @@
             android:layout_height="0dip"
             android:layout_weight="1"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="#ffffff" />
+           />
 
         <TextView
             android:id="@+id/number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="#cccccc" />
+            />
     </LinearLayout>
 
     <TextView
@@ -49,6 +49,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="10dp"
-        android:textColor="#ffffff" />
+        />
 
 </RelativeLayout>

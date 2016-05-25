@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import hixing.contacts.R;
+import hixing.contacts.application.MyApplication;
 import hixing.contacts.bean.SMSBean;
 import hixing.contacts.uitl.BaseIntentUtil;
 import hixing.contacts.uitl.RexseeSMS;
@@ -14,6 +15,7 @@ import hixing.contacts.view.sms.NewSMSActivity;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -70,7 +72,14 @@ public class HomeSMSActivity extends Activity {
 	}
 
 
-
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			((MyApplication) getApplication()).promptExit(this);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
 
 

@@ -57,7 +57,7 @@
         android:layout_below="@+id/acbuwa_topbar"
         android:layout_gravity="top|right|center"
         android:layout_marginTop="0dip"
-        android:background="@null"
+        android:background="#11000000"
         android:scaleType="centerInside"
         android:src="@drawable/dic_background" />
 

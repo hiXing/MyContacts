@@ -29,6 +29,7 @@ import android.provider.CallLog;
 import android.support.v4.app.ActivityCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -386,12 +387,7 @@ public class HomeDialActivity extends Activity implements OnClickListener {
 		}
 		startActivity(it);
 	}
-	
-	
-	
-	
-	
-	
+
 
 	public void dialPadShow(){
 		if(bohaopan.getVisibility() == View.VISIBLE){
@@ -402,7 +398,14 @@ public class HomeDialActivity extends Activity implements OnClickListener {
 			keyboard_show_ll.setVisibility(View.INVISIBLE);
 		}
 	}
-	
-	
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			((MyApplication) getApplication()).promptExit(this);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 	
 }

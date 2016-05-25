@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#000000" >
+     >
 
     <RelativeLayout
         android:id="@+id/acbuwa_topbar"
@@ -30,7 +30,8 @@
         android:background="@drawable/sms_add_contact_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="5dip" >
+
+         >
 
         <LinearLayout
             android:id="@+id/l1"
@@ -47,7 +48,7 @@
             android:id="@+id/add_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dip"
+            android:layout_margin="5dip"
             android:background="@drawable/sms_add_select_contact_btn" />
     </LinearLayout>
 
@@ -57,8 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/bottom_ll"
         android:layout_below="@+id/add_contact_ll"
-        android:background="#00000000"
-        android:cacheColorHint="#00000000"
+        android:cacheColorHint="#cc000000"
         android:choiceMode="singleChoice"
         android:fadingEdge="none"
         android:soundEffectsEnabled="true"
@@ -70,7 +70,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:background="@drawable/main_tab_bg"
         android:orientation="horizontal"
         android:padding="5dip" >
 

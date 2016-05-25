@@ -12,6 +12,6 @@
         android:layout_gravity="center"
         android:paddingLeft="3dip"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#ffffff" />
+         />
 
 </LinearLayout>

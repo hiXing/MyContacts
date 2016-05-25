@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#ffffff" />
+            />
 
         <TextView
             android:id="@+id/count"
@@ -35,7 +35,7 @@
             android:layout_marginLeft="5dip"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="#ffffff" />
+            />
     </LinearLayout>
 
     <TextView
@@ -46,7 +46,7 @@
         android:layout_toRightOf="@+id/qcb"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#ffffff" />
+        />
 
     <TextView
         android:id="@+id/content"

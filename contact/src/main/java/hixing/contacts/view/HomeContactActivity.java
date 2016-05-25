@@ -25,6 +25,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -296,7 +297,8 @@ public class HomeContactActivity extends Activity {
 	}
 
 
-	private String[] lianxiren1 = new String[]{"拨打电话", "发送短信", "查看详细", "移动分组", "移出群组", "删除"};
+//	private String[] lianxiren1 = new String[]{"拨打电话", "发送短信", "查看详细", "移动分组", "移出群组", "删除"};
+	private String[] lianxiren1 = new String[]{"拨打电话", "发送短信", "查看详细", "删除"};
 
 	//群组联系人弹出页
 	private void showContactDialog(final String[] arg, final ContactBean cb, final int position) {
@@ -741,7 +743,8 @@ public class HomeContactActivity extends Activity {
 			View layout = LayoutInflater.from(this).inflate(R.layout.bottom_popup, null);
 			mListView = (ListView) layout.findViewById(R.id.listView1);
 			mPopupWindow = new PopupWindow(layout, ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
-			mPopupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.black_bg));
+			mPopupWindow.setFocusable(true);
+			mPopupWindow.setBackgroundDrawable(getResources().getDrawable(R.color.window_bg));
 			mPopupWindow.setAnimationStyle(R.style.PopupAnimation);
 
 			popuAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
