@@ -42,7 +42,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:cacheColorHint="#000000"
-            android:divider="#33000000"
             android:fadingEdge="none"
             android:scrollbars="none"
             android:scrollingCache="false"

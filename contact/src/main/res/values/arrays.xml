@@ -2,9 +2,9 @@
 <resources>
 
     <string-array name="names">
-        <item>恢复联系人信息</item>
-        <item>导出到SD并上传</item>
-        <item>从手机通讯录添加</item>
+        <item>从云端恢复联系人</item>
+        <item>备份联系人到云端</item>
+        <item>备份到本地</item>
     </string-array>
 
 </resources>

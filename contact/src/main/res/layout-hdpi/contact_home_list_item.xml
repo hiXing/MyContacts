@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    >
 
     <!-- 首字母 -->
 
@@ -9,7 +10,7 @@
         android:id="@+id/alpha"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#333333"
+        android:background="#33333333"
         android:paddingLeft="10dip"
         android:visibility="gone" />
 
@@ -21,8 +22,7 @@
         android:layout_height="75dip"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/alpha"
-        android:layout_marginBottom="3dip"
-        android:layout_marginTop="3dip"
+        android:layout_margin="5dip"
         android:src="@drawable/touxiang" />
 
     <TextView
@@ -43,6 +43,7 @@
         android:layout_toRightOf="@+id/qcb"
         android:layout_alignParentBottom="true"
         android:singleLine="true"
+        android:layout_marginBottom="5dp"
         android:textAppearance="?android:textAppearanceSmall" />
 
 </RelativeLayout>

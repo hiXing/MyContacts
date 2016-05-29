@@ -242,11 +242,9 @@ public class HomeDialActivity extends Activity implements OnClickListener {
 		});
 		callLogList.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				if(!list.isEmpty()){
+				if (!list.isEmpty()) {
 					CallLogBean callLogBean = list.get(position);
-					Uri uri = Uri.parse("tel:" + callLogBean.getNumber());
-					Intent it = new Intent(Intent.ACTION_CALL, uri);
-					startActivity(it);
+					call(callLogBean.getNumber());
 				}
 
 			}
@@ -364,16 +362,7 @@ public class HomeDialActivity extends Activity implements OnClickListener {
 	private void call(String phone) {
 		Uri uri = Uri.parse("tel:" + phone);
 		Intent it = new Intent(Intent.ACTION_CALL, uri);
-		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-			// TODO: Consider calling
-			//    ActivityCompat#requestPermissions
-			// here to request the missing permissions, and then overriding
-			//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-			//                                          int[] grantResults)
-			// to handle the case where the user grants the permission. See the documentation
-			// for ActivityCompat#requestPermissions for more details.
-			return;
-		}
+
 		startActivity(it);
 	}
 

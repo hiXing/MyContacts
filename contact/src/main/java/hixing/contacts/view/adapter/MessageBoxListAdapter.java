@@ -105,18 +105,6 @@ public class MessageBoxListAdapter extends BaseAdapter {
 		});
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
 	private String[] newtan = new String[] { "转发", "复制文本内容", "删除", "查看信息详情" };
 	private void showListDialog(final String[] arg, final MessageBean mb){
 		new AlertDialog.Builder(ctx).setTitle("信息选项").setItems(arg,
