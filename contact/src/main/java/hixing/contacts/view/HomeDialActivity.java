@@ -10,6 +10,8 @@ import java.util.Map;
 import hixing.contacts.R;
 import hixing.contacts.application.MyApplication;
 import hixing.contacts.bean.CallLogBean;
+import hixing.contacts.bean.ContactBean;
+import hixing.contacts.uitl.AbToastUtil;
 import hixing.contacts.view.adapter.HomeDialAdapter;
 import hixing.contacts.view.adapter.T9Adapter;
 
@@ -62,6 +64,7 @@ public class HomeDialActivity extends Activity implements OnClickListener {
 	private AudioManager am = null;
 
 	private MyApplication application;
+
 	private ListView listView;
 	private T9Adapter t9Adapter;
 
@@ -135,6 +138,15 @@ public class HomeDialActivity extends Activity implements OnClickListener {
 						callLogList.setVisibility(View.INVISIBLE);
 						listView.setVisibility(View.VISIBLE);
 						t9Adapter.getFilter().filter(s);
+					}
+					if(listView!=null){
+						listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+							@Override
+							public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+								ContactBean contactBean = application.getContactBeanList().get(position);
+								call(contactBean.getPhoneNum());
+							}
+						});
 					}
 				}
 			}
@@ -332,6 +344,8 @@ public class HomeDialActivity extends Activity implements OnClickListener {
 			case R.id.phone_view:
 				if (phone_view.getText().toString().length() >= 4) {
 					call(phone_view.getText().toString());
+				}else {
+					AbToastUtil.shortShow(HomeDialActivity.this,"电话格式不对");
 				}
 				break;
 			default:
