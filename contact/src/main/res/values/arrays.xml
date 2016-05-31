@@ -4,7 +4,6 @@
     <string-array name="names">
         <item>从云端恢复联系人</item>
         <item>备份联系人到云端</item>
-        <item>备份到本地</item>
     </string-array>
 
 </resources>
