@@ -1,6 +1,6 @@
 # 通讯录实现
 
-	参考链接：	http://blog.csdn.net/wwj_748/article/details/19965913
+	参考链接：[http://blog.csdn.net/wwj_748/article/details/19965913](http://blog.csdn.net/wwj_748/article/details/19965913)
 
 ##	登录注册：
 
@@ -27,8 +27,8 @@
 	
 	获取短信列表，在android4.4以后Google 更改了短信的权限机制，直接获取短信记录会有问题；
 	
-	参考文章：	http://blog.csdn.net/krislight/article/details/12868603
-				http://blog.csdn.net/cb269267/article/details/20038277?utm_source=tuicool&utm_medium=referral
+	参考文章：[http://blog.csdn.net/krislight/article/details/12868603](http://blog.csdn.net/krislight/article/details/12868603)
+			[http://blog.csdn.net/cb269267/article/details/20038277?utm_source=tuicool&utm_medium=referral](http://blog.csdn.net/cb269267/article/details/20038277?utm_source=tuicool&utm_medium=referral)
 
 ----	
 
