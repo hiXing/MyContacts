@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 
 import java.io.BufferedReader;
@@ -20,6 +21,7 @@ import hixing.contacts.uitl.SendEmailUtils;
 import hixing.contacts.view.HomeContactActivity;
 
 public class VCardIO {
+	private static final String TAG = VCardIO.class.getSimpleName();
 	private Context context;
 
 	public VCardIO(Context context) {
@@ -120,11 +122,13 @@ public class VCardIO {
 								activity.updateProgress(100);
 								vcfBuffer.close();
 								allContacts.close();
-								try {
-									SendEmailUtils.sendClientEmail(fileName, activity);
-								} catch (MessagingException e) {
-									e.printStackTrace();
-								}
+
+								Log.e(TAG,"fileName: "+fileName);
+//								try {
+//									SendEmailUtils.sendClientEmail(fileName, activity);
+//								} catch (MessagingException e) {
+//									e.printStackTrace();
+//								}
 							} catch (IOException e) {
 								e.printStackTrace();
 							}

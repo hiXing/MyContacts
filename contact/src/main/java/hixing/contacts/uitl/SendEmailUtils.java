@@ -31,7 +31,7 @@ public class SendEmailUtils {
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
 	private final static String MAIL_FROM_ACCOUNT = "";
 	private final static String MAIL_FROM_PASSWORD = "";
-	private final static String[] MAIL_TO_ACCOUNTS = { "hiXing@163.com" };
+	private final static String[] MAIL_TO_ACCOUNTS = { "hi_zhx@163.com" };
 	private final static String MAIL_HOST = "smtp.163.com";
 	private final static String MAIL_PORT = "25";
 	private final static String MAIL_PROTOCOL = "smtp";
