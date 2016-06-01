@@ -1,4 +1,4 @@
-package hixing.contacts.uitl;
+package hixing.contacts.view.sms;
 
 import java.util.ArrayList;
 import java.util.List;

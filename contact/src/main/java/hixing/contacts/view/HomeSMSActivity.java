@@ -8,7 +8,7 @@ import hixing.contacts.R;
 import hixing.contacts.application.MyApplication;
 import hixing.contacts.bean.SMSBean;
 import hixing.contacts.uitl.BaseIntentUtil;
-import hixing.contacts.uitl.RexseeSMS;
+import hixing.contacts.view.sms.RexseeSMS;
 import hixing.contacts.view.adapter.HomeSMSAdapter;
 import hixing.contacts.view.sms.MessageBoxList;
 import hixing.contacts.view.sms.NewSMSActivity;

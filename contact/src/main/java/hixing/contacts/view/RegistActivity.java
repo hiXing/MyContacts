@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import hixing.contacts.R;
 import hixing.contacts.uitl.AbToastUtil;
+import hixing.contacts.uitl.BaseIntentUtil;
 import hixing.contacts.uitl.PropertiesUtil;
 import hixing.contacts.uitl.RegexUtil;
 import hixing.contacts.view.other.MyConstant;
@@ -39,6 +40,7 @@ public class RegistActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_regist);
+        PropertiesUtil.intializePreference(RegistActivity.this);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.regist_email);
 
         mPasswordView = (EditText) findViewById(R.id.regist_password);
@@ -194,9 +196,9 @@ public class RegistActivity extends Activity {
             } catch (InterruptedException e) {
                 return false;
             }
-            PropertiesUtil.intializePreference(RegistActivity.this);
             PropertiesUtil.save(PropertiesUtil.USER_PHONE,mEmail);
             PropertiesUtil.save(PropertiesUtil.USER_PWD,mPassword);
+            PropertiesUtil.save(PropertiesUtil.ISFIRST,false);
             return true;
         }
 
@@ -207,6 +209,7 @@ public class RegistActivity extends Activity {
 
             if (success) {
                 AbToastUtil.shortShow(RegistActivity.this,"注册成功");
+                BaseIntentUtil.intentDIY(RegistActivity.this,SplashActivity.class);
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

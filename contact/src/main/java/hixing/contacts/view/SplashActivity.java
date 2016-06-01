@@ -2,9 +2,7 @@ package hixing.contacts.view;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.InputType;
@@ -15,21 +13,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import hixing.contacts.R;
 import hixing.contacts.uitl.AbToastUtil;
 import hixing.contacts.uitl.BaseIntentUtil;
 import hixing.contacts.uitl.PropertiesUtil;
-import hixing.contacts.view.other.MyConstant;
 
 
 public class SplashActivity extends Activity {
 	private static final String TAG = SplashActivity.class.getSimpleName();
 	private String mPwdText;
-	private String mNameText;
+//	private String mNameText;
 	private boolean isFirstRun;
-	private EditText uName;
+//	private EditText uName;
 	private EditText uPwd;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,29 +34,29 @@ public class SplashActivity extends Activity {
 		// 判断是否首次运行
 		PropertiesUtil.intializePreference(SplashActivity.this);
 		isFirstRun = PropertiesUtil.read(PropertiesUtil.ISFIRST,true);
+		if(isFirstRun){
+			BaseIntentUtil.intentDIY(SplashActivity.this,RegistActivity.class);
+			finish();
+			return;
+		}
 		showLogin();
 	}
 
 	private void showLogin() {
 
-//		if(isFirstRun){
-//			BaseIntentUtil.intentDIY(SplashActivity.this,RegistActivity.class);
-//			finish();
-//			return;
-//		}else {
 		LinearLayout linearLayout = new LinearLayout(this);
 		linearLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
 				ViewGroup.LayoutParams.MATCH_PARENT));
 		linearLayout.setOrientation(LinearLayout.VERTICAL);
 		linearLayout.setPadding(24,10,24,10);
-		uName = new EditText(this);
-		uName.setHint(R.string.mobile_ask);
-		uName.setInputType(InputType.TYPE_CLASS_PHONE);
+//		uName = new EditText(this);
+//		uName.setHint(R.string.mobile_ask);
+//		uName.setInputType(InputType.TYPE_CLASS_PHONE);
 		uPwd = new EditText(this);
 		uPwd.setHint(R.string.prompt_password);
 		uPwd.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD|InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 		uPwd.setTransformationMethod(PasswordTransformationMethod.getInstance());
-		linearLayout.addView(uName);
+//		linearLayout.addView(uName);
 		linearLayout.addView(uPwd);
 
 
@@ -68,7 +64,7 @@ public class SplashActivity extends Activity {
 				.setView(linearLayout)
 				.setCancelable(false)
 				.setPositiveButton("确定",null)
-				.setNeutralButton("去注册",null)
+				.setNeutralButton("忘记密码？",null)
 				.setNegativeButton("取消",new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -82,20 +78,27 @@ public class SplashActivity extends Activity {
 		alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				BaseIntentUtil.intentDIY(SplashActivity.this,RegistActivity.class);
+//				BaseIntentUtil.intentDIY(SplashActivity.this,RegistActivity.class);
+				AbToastUtil.longShow(SplashActivity.this,"呵呵，重新安装软件吧！");
 			}
 		});
 		alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String name1 = uName.getText().toString();
+//				String name1 = uName.getText().toString();
 				String mima = uPwd.getText().toString();
-				if(TextUtils.isEmpty(name1)||TextUtils.isEmpty(mima)){
-					AbToastUtil.shortShow(SplashActivity.this, "用户名或密码不能为空！");
+				if(TextUtils.isEmpty(mima)){
+					AbToastUtil.shortShow(SplashActivity.this, "密码不能为空！");
 					return;
 				}
-				if (mPwdText.equals(mima)&&mNameText.equals(name1)) {
-					AbToastUtil.shortShow(SplashActivity.this, "登录成功！");
+				/*if(TextUtils.isEmpty(name1)){
+					AbToastUtil.shortShow(SplashActivity.this, "用户名不能为空！");
+					return;
+				}
+				&&mNameText.equals(name1)
+				*/
+				if (mPwdText.equals(mima)) {
+					AbToastUtil.longShow(SplashActivity.this, "登录成功！正在进入...");
 					alertDialog.dismiss();
 					new Handler().postDelayed(new Runnable() {
 
@@ -103,9 +106,9 @@ public class SplashActivity extends Activity {
 						public void run() {
 							enterHomeActivity();
 						}
-					}, 1500);
+					}, 1000);
 				} else {
-					AbToastUtil.shortShow(SplashActivity.this, "用户名或密码错误！");
+					AbToastUtil.shortShow(SplashActivity.this, "密码错误！");
 				}
 			}
 		});
@@ -117,30 +120,30 @@ public class SplashActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 		getUser();
-		setUser(uName,uPwd);
+//		setUser(uName,uPwd);
 	}
 	private void getUser(){
 		if(TextUtils.isEmpty(mPwdText)){
 			mPwdText = PropertiesUtil.read(PropertiesUtil.USER_PWD, "");
 		}
-		if(TextUtils.isEmpty(mNameText)){
-			mNameText = PropertiesUtil.read(PropertiesUtil.USER_PHONE, "");
-		}
+//		if(TextUtils.isEmpty(mNameText)){
+//			mNameText = PropertiesUtil.read(PropertiesUtil.USER_PHONE, "");
+//		}
 
 		Log.e(TAG, "onStart: Pwd:"+mPwdText );
-		Log.e(TAG, "onStart: mNameText:"+mNameText );
+//		Log.e(TAG, "onStart: mNameText:"+mNameText );
 	}
-	private void setUser(EditText tv_name,EditText tv_pwd){
-		if(tv_name==null || tv_pwd==null){
-			return;
-		}
-		if(!TextUtils.isEmpty(mNameText)){
-			tv_name.setText(mNameText);
-		}
-		if(TextUtils.isEmpty(mPwdText)){
-			tv_pwd.setText(mPwdText);
-		}
-	}
+//	private void setUser(EditText tv_name,EditText tv_pwd){
+//		if(tv_name==null || tv_pwd==null){
+//			return;
+//		}
+//		if(!TextUtils.isEmpty(mNameText)){
+//			tv_name.setText(mNameText);
+//		}
+//		if(TextUtils.isEmpty(mPwdText)){
+//			tv_pwd.setText(mPwdText);
+//		}
+//	}
 	private void enterHomeActivity() {
 		BaseIntentUtil.intentDIY(SplashActivity.this,HomeTabHostAcitivity.class);
 		finish();
