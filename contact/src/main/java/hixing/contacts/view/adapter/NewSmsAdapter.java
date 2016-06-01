@@ -25,8 +25,14 @@ public class NewSmsAdapter extends BaseAdapter implements Filterable {
 		mInflater = LayoutInflater.from(context); 
 		this.list = new ArrayList<ContactBean>();
 		this.context=context;
-	}   
+	}
+	public List<ContactBean> getList() {
+		return list;
+	}
 
+	public void setList(List<ContactBean> list) {
+		this.list = list;
+	}
 	public void assignment(List<ContactBean> list){
 		this.allContactList = list;
 		this.list = this.allContactList;

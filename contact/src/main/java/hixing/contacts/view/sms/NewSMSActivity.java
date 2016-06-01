@@ -1,19 +1,10 @@
 package hixing.contacts.view.sms;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import hixing.contacts.R;
-import hixing.contacts.bean.ContactBean;
-import hixing.contacts.uitl.BaseIntentUtil;
-import hixing.contacts.view.adapter.NewSmsAdapter;
-import hixing.contacts.view.ui.MyViewGroup;
 import android.app.Activity;
 import android.content.AsyncQueryHandler;
 import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -24,7 +15,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
@@ -45,6 +35,18 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import hixing.contacts.R;
+import hixing.contacts.bean.ContactBean;
+import hixing.contacts.uitl.BaseIntentUtil;
+import hixing.contacts.view.adapter.NewSmsAdapter;
+import hixing.contacts.view.ui.MyViewGroup;
+
 public class NewSMSActivity extends Activity {
 
 	private ImageButton btn_return;
@@ -56,22 +58,27 @@ public class NewSMSActivity extends Activity {
 	private LinearLayout ll;
 	private EditText etMess;
 	private int extiTextId = 100001;
-	private String[] chars = new String[]{" ", ","};
+	private String[] chars = new String[] { " ", "," };
 
 	private ListView queryListView;
 	private NewSmsAdapter adapter;
 
 	private AsyncQueryHandler asyncQuery;
 	private List<ContactBean> list;
+	private EditText neirong;
 
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.new_sms);
-
+		neirong = (EditText) findViewById(R.id.neirong);
+		String neirongstr = getIntent().getStringExtra("neirong");
+		if (neirongstr != null && !neirongstr.equals("")) {
+			neirong.setText(neirongstr);
+		}
 
 		queryListView = (ListView) findViewById(R.id.list);
-		
+
 		btn_return = (ImageButton) findViewById(R.id.btn_return);
 		btn_return.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -81,21 +88,21 @@ public class NewSMSActivity extends Activity {
 		add_btn = (ImageButton) findViewById(R.id.add_btn);
 		add_btn.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				
-				if(null == etMess || "".equals(etMess.getText().toString())){
-				}else{
+
+				if (null == etMess || "".equals(etMess.getText().toString())) {
+				} else {
 					String phoneNum = etMess.getText().toString();
-					if(isNum(etMess.getText().toString().trim())){
+					if (isNum(etMess.getText().toString().trim())) {
 						createView1(phoneNum, phoneNum);
 						etMess.setText("");
-					}else{
+					} else {
 						etMess.setText("");
 					}
 				}
-				
-				if(null == selectContactList || selectContactList.size() < 1){
+
+				if (null == selectContactList || selectContactList.size() < 1) {
 					BaseIntentUtil.intentSysDefault(NewSMSActivity.this, SelectContactsToSendActivity.class, null);
-				}else{
+				} else {
 					Gson gson = new Gson();
 					String data = gson.toJson(selectContactList);
 					Map<String, String> map = new HashMap<String, String>();
@@ -109,22 +116,42 @@ public class NewSMSActivity extends Activity {
 		fasong.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 
-				if(null == etMess || "".equals(etMess.getText().toString())){
-				}else{
-					String phoneNum = etMess.getText().toString();
-					if(isNum(etMess.getText().toString().trim())){
+				if (neirong.getText().toString().equals("")) {
+					Toast.makeText(NewSMSActivity.this, "短信内容不能为空", Toast.LENGTH_SHORT).show();
+					return;
+
+				}
+				String phoneNum = etMess.getText().toString();
+				if (null == etMess || "".equals(etMess.getText().toString())) {
+				} else {
+					if (isNum(etMess.getText().toString().trim())) {
 						createView1(phoneNum, phoneNum);
 						etMess.setText("");
-					}else{
+					} else {
 						etMess.setText("");
 					}
 				}
 
-				if(null == selectContactList || selectContactList.size()<1){
+				// 群发
+				if (null == selectContactList || selectContactList.size() < 1) {
 					Toast.makeText(NewSMSActivity.this, "请输入发送目标", Toast.LENGTH_SHORT).show();
-				}else{
+				} else {
 
-					for(ContactBean cb : selectContactList){
+					for (ContactBean cb : selectContactList) {
+
+						ContentValues values = new ContentValues();
+						values.put("address", cb.getPhoneNum());
+						values.put("body", neirong.getText().toString());
+						getContentResolver().insert(Uri.parse("content://sms/sent"), values);
+
+						list.add(cb);
+						((NewSmsAdapter) queryListView.getAdapter()).setList(list);
+
+						((NewSmsAdapter) queryListView.getAdapter()).notifyDataSetChanged();
+
+						Toast.makeText(NewSMSActivity.this, neirong.getText().toString(), Toast.LENGTH_SHORT).show();
+
+						SendSMS(cb.getPhoneNum(), neirong.getText().toString());
 
 						System.out.println(cb.getDisplayName());
 						System.out.println(cb.getPhoneNum());
@@ -135,97 +162,101 @@ public class NewSMSActivity extends Activity {
 			}
 		});
 
-		
 		asyncQuery = new MyAsyncQueryHandler(getContentResolver());
 		query();
-		
 
 		initMyGroupView();
 
-
-		if(null != getIntent().getStringExtra("list")){
+		if (null != getIntent().getStringExtra("list")) {
 			String data = getIntent().getStringExtra("list");
 			Gson gson = new Gson();
-			Type listRet = new TypeToken<List<ContactBean>>() { }.getType();
+			Type listRet = new TypeToken<List<ContactBean>>() {
+			}.getType();
 			selectContactList = gson.fromJson(data, listRet);
-			for(ContactBean cb : selectContactList){
+			for (ContactBean cb : selectContactList) {
 				createView2(cb.getDisplayName().trim());
-				final View child = mvg.getChildAt(mvg.getChildCount()-1);
+				final View child = mvg.getChildAt(mvg.getChildCount() - 1);
 				autoHeight(child);
 			}
 		}
 
 	}
 
-	private void query(){
-		Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI; // 联系人的Uri
-		String[] projection = { 
-				ContactsContract.CommonDataKinds.Phone._ID,
-				ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-				ContactsContract.CommonDataKinds.Phone.DATA1,
-				"sort_key",
-				ContactsContract.CommonDataKinds.Phone.CONTACT_ID,
-				ContactsContract.CommonDataKinds.Phone.PHOTO_ID,
-				ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY
-		}; // 查询的列
-		asyncQuery.startQuery(0, null, uri, projection, null, null,
-				"sort_key COLLATE LOCALIZED asc"); // 按照sort_key升序查询
+	/**
+	 * 调起系统发短信功能
+	 * 
+	 * @param phoneNumber
+	 *            发送短信的接收号码
+	 * @param message
+	 *            短信内容
+	 */
+	public void SendSMS(String phoneNumber, String message) {
+		Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + phoneNumber));
+		intent.putExtra("sms_body", message);
+		startActivity(intent);
 	}
 
-	private void initMyGroupView(){
+	private void query() {
+		Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI; // 联系人的Uri
+		String[] projection = { ContactsContract.CommonDataKinds.Phone._ID, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.DATA1, "sort_key",
+				ContactsContract.CommonDataKinds.Phone.CONTACT_ID, ContactsContract.CommonDataKinds.Phone.PHOTO_ID, ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY }; // 查询的列
+		asyncQuery.startQuery(0, null, uri, projection, null, null, "sort_key COLLATE LOCALIZED asc"); // 按照sort_key升序查询
+	}
+
+	private void initMyGroupView() {
 		ll = (LinearLayout) findViewById(R.id.l1);
 		DisplayMetrics metric = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metric);
 		/**********************************************************************************************/
-		mvg = new MyViewGroup(NewSMSActivity.this);   
-		mvg.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, 80));
-		//		mvg.setBackgroundColor(Color.GREEN);
+		mvg = new MyViewGroup(NewSMSActivity.this);
+		mvg.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, 70));
 		etMess = new EditText(NewSMSActivity.this);
-		etMess.setFilters(new InputFilter[]{new InputFilter.LengthFilter(15)});
+		etMess.setFilters(new InputFilter[] { new InputFilter.LengthFilter(15) });
 		etMess.setSelection(etMess.getText().length());
-		etMess.setGravity(Gravity.CENTER_VERTICAL);
-		etMess.setMinWidth(100);
-		etMess.setHeight(60);
+		etMess.setMinWidth(LayoutParams.WRAP_CONTENT);
+		etMess.setHeight(LayoutParams.WRAP_CONTENT);
 		etMess.setTag("edit");
 		etMess.getBackground().setAlpha(0);
 		etMess.setId(extiTextId);
 		etMess.addTextChangedListener(new TextWatcher() {
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				
-				if(isNum(s.toString())){
-					if(s.length() >= 1){
+
+				if (isNum(s.toString())) {
+					if (s.length() >= 1) {
 						boolean bool = false;
-						//length() == 15直接生成按钮
-						if(s.length() == 15){
+						// length() == 15直接生成按钮
+						if (s.length() == 15) {
 							bool = true;
 						}
-						//字数没有满足15个验证是否有空格
-						if(!bool){
-							String c = s.toString().substring(start, start+count);
+						// 字数没有满足15个验证是否有空格
+						if (!bool) {
+							String c = s.toString().substring(start, start + count);
 							for (int i = 0; i < chars.length; i++) {
-								if(chars[i].equals(c)){
+								if (chars[i].equals(c)) {
 									bool = true;
 									break;
 								}
 							}
 						}
-						//bool == true 生成Button
-						if(bool){
+						// bool == true 生成Button
+						if (bool) {
 							createView1(s.toString(), s.toString());
 							etMess.setText("");
 						}
-						//检测输入框数据是否已经换行
-						final View child = mvg.getChildAt(mvg.getChildCount()-1);
+						// 检测输入框数据是否已经换行
+						final View child = mvg.getChildAt(mvg.getChildCount() - 1);
 						autoHeight(child);
 					}
-				}else{
+				} else {
 					adapter.getFilter().filter(s);
 					queryListView.setVisibility(View.VISIBLE);
 				}
-				
+
 			}
+
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 			}
+
 			public void afterTextChanged(Editable s) {
 			}
 		});
@@ -233,11 +264,11 @@ public class NewSMSActivity extends Activity {
 		ll.addView(mvg);
 		etMess.setOnFocusChangeListener(new OnFocusChangeListener() {
 			public void onFocusChange(View v, boolean hasFocus) {
-				if(!hasFocus){
-					if(isNum(etMess.getText().toString().trim())){
+				if (!hasFocus) {
+					if (isNum(etMess.getText().toString().trim())) {
 						createView1(etMess.getText().toString().trim(), etMess.getText().toString().trim());
 						etMess.setText("");
-					}else{
+					} else {
 						etMess.setText("");
 						queryListView.setVisibility(View.INVISIBLE);
 					}
@@ -248,10 +279,11 @@ public class NewSMSActivity extends Activity {
 
 	/**
 	 * 为MyViewGroup自动计算高度
+	 * 
 	 * @param child
 	 */
 	private void autoHeight(final View child) {
-		if (child != null){
+		if (child != null) {
 			new Handler() {
 			}.postDelayed(new Runnable() {
 				public void run() {
@@ -267,18 +299,18 @@ public class NewSMSActivity extends Activity {
 
 	/**
 	 * 生成MyViewGroup的子元素
+	 * 
 	 * @param text
 	 */
 	private void createView1(String text, String number) {
 
-		if(etMess.getText().toString().equals(" ")||etMess.getText().toString().equals("")){
-		}else{
+		if (etMess.getText().toString().equals(" ") || etMess.getText().toString().equals("")) {
+		} else {
 			TextView t = new TextView(this);
 			t.setText(text);
 			t.setTextColor(Color.BLACK);
-			t.setGravity(Gravity.CENTER);
 			t.setBackgroundResource(R.drawable.bg_sms_contact_btn);
-			t.setHeight(60);
+			t.setHeight(LayoutParams.WRAP_CONTENT);
 			t.setPadding(2, 0, 2, 0);
 			t.setOnClickListener(new MyListener());
 			t.setTag(number);
@@ -287,7 +319,7 @@ public class NewSMSActivity extends Activity {
 			ContactBean cb = new ContactBean();
 			cb.setDisplayName(text);
 			cb.setPhoneNum(number);
-			if(null == selectContactList){
+			if (null == selectContactList) {
 				selectContactList = new ArrayList<ContactBean>();
 			}
 			selectContactList.add(cb);
@@ -300,9 +332,8 @@ public class NewSMSActivity extends Activity {
 		TextView t = new TextView(this);
 		t.setText(text);
 		t.setTextColor(Color.BLACK);
-		t.setGravity(Gravity.CENTER);
-		t.setHeight(60);
 		t.setPadding(2, 0, 2, 0);
+		t.setHeight(LayoutParams.WRAP_CONTENT);
 		t.setBackgroundResource(R.drawable.bg_sms_contact_btn);
 		t.setOnClickListener(new MyListener());
 		t.setTag(text);
@@ -311,23 +342,22 @@ public class NewSMSActivity extends Activity {
 
 	/**
 	 * MyViewGroup子元素的事件
+	 * 
 	 * @author LDM
 	 */
-	private class MyListener implements OnClickListener{
+	private class MyListener implements OnClickListener {
 		public void onClick(View v) {
 			mvg.removeView(v);
 			String number = (String) v.getTag();
-			for(ContactBean cb: selectContactList){
-				if(cb.getPhoneNum().equals(number)){
+			for (ContactBean cb : selectContactList) {
+				if (cb.getPhoneNum().equals(number)) {
 					selectContactList.remove(cb);
 					break;
 				}
 			}
-			autoHeight(mvg.getChildAt(mvg.getChildCount() -1));
+			autoHeight(mvg.getChildAt(mvg.getChildCount() - 1));
 		}
 	}
-
-
 
 	/**
 	 * 数据库异步查询类AsyncQueryHandler
@@ -362,7 +392,7 @@ public class NewSMSActivity extends Activity {
 					cb.setContactId(contactId);
 					cb.setPhotoId(photoId);
 					cb.setLookUpKey(lookUpKey);
-					
+
 					list.add(cb);
 				}
 				if (list.size() > 0) {
@@ -379,22 +409,22 @@ public class NewSMSActivity extends Activity {
 		queryListView.setTextFilterEnabled(true);
 		queryListView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				ContactBean cb= (ContactBean) adapter.getItem(position);
+				ContactBean cb = (ContactBean) adapter.getItem(position);
 				boolean b = true;
-				if(null == selectContactList || selectContactList.size()<1){
-				}else{
-					for(ContactBean cbean : selectContactList){
-						if(cbean.getPhoneNum().equals(cb.getPhoneNum())){
+				if (null == selectContactList || selectContactList.size() < 1) {
+				} else {
+					for (ContactBean cbean : selectContactList) {
+						if (cbean.getPhoneNum().equals(cb.getPhoneNum())) {
 							b = false;
 							break;
 						}
 					}
 				}
-				if(b){
+				if (b) {
 					etMess.setText(cb.getDisplayName());
 					createView1(etMess.getText().toString().trim(), cb.getPhoneNum());
 					etMess.setText("");
-				}else{
+				} else {
 					queryListView.setVisibility(View.INVISIBLE);
 					etMess.setText("");
 				}
@@ -403,25 +433,18 @@ public class NewSMSActivity extends Activity {
 		queryListView.setOnScrollListener(new OnScrollListener() {
 
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				if(scrollState == OnScrollListener.SCROLL_STATE_IDLE){
-					((InputMethodManager)getSystemService(INPUT_METHOD_SERVICE))
-					.hideSoftInputFromWindow(NewSMSActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS); 
+				if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
+					((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(NewSMSActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 				}
 			}
-			public void onScroll(AbsListView view, int firstVisibleItem,
-					int visibleItemCount, int totalItemCount) {
+
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 			}
 		});
 	}
 
-
-	private boolean isNum(String str){
+	private boolean isNum(String str) {
 		return str.matches("^[-+]?(([0-9]+)([.]([0-9]+))?|([.]([0-9]+))?)$");
 	}
-
-
-
-
-
 
 }

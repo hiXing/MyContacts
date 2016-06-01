@@ -19,9 +19,7 @@ import java.net.URL;
  * MyContacts
  */
 public class HttpUtil {
-    public static void upLoadFile(Context context, String fileUrl, File file){
-
-    }
+    private String srcPath;
     public static String sendFile(String urlPath, String filePath,
                                   String newName,CustomFileInputStream.OnUploadListener listener) throws Exception {
         String end = "\r\n";
@@ -145,8 +143,7 @@ public class HttpUtil {
         } catch (Exception e)
         {
             e.printStackTrace();
-            setTitle(e.getMessage());
+//            setTitle(e.getMessage());
         }
     }
-}
 }
