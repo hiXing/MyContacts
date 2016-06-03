@@ -49,6 +49,13 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lidroid.xutils.DbUtils;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
+import com.lidroid.xutils.util.LogUtils;
 
 import hixing.contacts.R;
 import hixing.contacts.application.MyApplication;
@@ -58,13 +65,10 @@ import hixing.contacts.bean.ContactBean;
 import hixing.contacts.bean.GroupBean;
 import hixing.contacts.uitl.AbToastUtil;
 import hixing.contacts.uitl.BaseIntentUtil;
+import hixing.contacts.uitl.PropertiesUtil;
 import hixing.contacts.vcard.VCardIO;
 import hixing.contacts.view.adapter.ContactHomeAdapter;
-import hixing.contacts.view.adapter.MenuListAdapter;
-import hixing.contacts.view.other.SizeCallBackForMenu;
 import hixing.contacts.view.sms.MessageBoxList;
-import hixing.contacts.view.ui.MenuHorizontalScrollView;
-import hixing.contacts.view.ui.QuickAlphabeticBar;
 
 public class HomeContactActivity extends Activity {
 
@@ -716,7 +720,45 @@ public class HomeContactActivity extends Activity {
 				AbToastUtil.shortShow(HomeContactActivity.this, "导出失败，可能是因为SD卡不存在！");
 			}
 		}
+	}
+	public void doUpload(File file){
+		String phone = PropertiesUtil.read(PropertiesUtil.USER_PHONE,"110");
+		HttpUtils httpUtils = new HttpUtils();
+		RequestParams requestParams = new RequestParams();
+		requestParams.addBodyParameter("usertel",phone);
+		requestParams.addBodyParameter("uploadedfile",file);
+		String url = "http://tryworld.cn/index.php/Home/Appapi/upload";
+		httpUtils.send(HttpRequest.HttpMethod.POST, url,requestParams, new RequestCallBack<String>() {
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				LogUtils.e("onSuccess-response:"+responseInfo.statusCode);
+				LogUtils.e("onSuccess-response:"+responseInfo.reasonPhrase);
+				LogUtils.e("onSuccess-response:"+responseInfo.result);
+			}
 
+			@Override
+			public void onFailure(HttpException e, String s) {
+				LogUtils.e(e.getMessage()+"onFailure-response:"+s);
+			}
+		});
+	}
+	public void doGetContacts(){
+		String phone = PropertiesUtil.read(PropertiesUtil.USER_PHONE,"110");
+		HttpUtils httpUtils = new HttpUtils();
+		RequestParams requestParams = new RequestParams();
+		requestParams.addBodyParameter("usertel",phone);
+		String url = "http://tryworld.cn/index.php/Home/Appapi/getConnect";
+		httpUtils.download(url, "", requestParams, new RequestCallBack<File>() {
+			@Override
+			public void onSuccess(ResponseInfo<File> responseInfo) {
+				LogUtils.e("onSuccess-response:"+responseInfo);
+			}
+
+			@Override
+			public void onFailure(HttpException e, String s) {
+				LogUtils.e(e.getMessage()+"onFailure-response:"+s);
+			}
+		});
 	}
 
 	/**
@@ -726,12 +768,17 @@ public class HomeContactActivity extends Activity {
 	public void doImport() {
 		if (vcarIO != null) {
 			// 判断存储卡是否存在
-			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) && new File(fileName).exists()) {
-				// 更新进度
-				progressDlg.show();
-				importing = "正在导入,请稍后...";
-				updateProgress(0);
-				vcarIO.doImport(fileName, true, HomeContactActivity.this);
+			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+				if(new File(fileName).exists()){
+					// 更新进度
+					progressDlg.show();
+					importing = "正在导入,请稍后...";
+					updateProgress(0);
+					vcarIO.doImport(fileName, true, HomeContactActivity.this);
+				}else {
+					doGetContacts();
+				}
+
 			} else {
 				AbToastUtil.shortShow(HomeContactActivity.this, "导入失败，可能是因为SD卡或者导入包不存在！");
 			}

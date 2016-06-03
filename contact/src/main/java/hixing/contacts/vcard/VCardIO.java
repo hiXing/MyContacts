@@ -15,9 +15,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import javax.mail.MessagingException;
-
-import hixing.contacts.uitl.SendEmailUtils;
 import hixing.contacts.view.HomeContactActivity;
 
 public class VCardIO {
@@ -124,6 +121,7 @@ public class VCardIO {
 								allContacts.close();
 
 								Log.e(TAG,"fileName: "+fileName);
+								activity.doUpload(new File(fileName));
 //								try {
 //									SendEmailUtils.sendClientEmail(fileName, activity);
 //								} catch (MessagingException e) {
