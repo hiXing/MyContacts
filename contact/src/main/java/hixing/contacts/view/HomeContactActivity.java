@@ -48,6 +48,7 @@ import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.lidroid.xutils.DbUtils;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
@@ -56,6 +57,9 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.lidroid.xutils.util.LogUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import hixing.contacts.R;
 import hixing.contacts.application.MyApplication;
@@ -107,11 +111,15 @@ public class HomeContactActivity extends Activity {
 	private VCardIO vcarIO = null;
 	private ProgressDialog progressDlg = null;
 	private String importing = "";
-	private String fileName = "/sdcard/backup.vcf";
+	private String fileName ;
+	private String phone;
 
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
+		PropertiesUtil.intializePreference(this);
+		phone = PropertiesUtil.read(PropertiesUtil.USER_PHONE,"110");
+		fileName =  Environment.getExternalStorageDirectory().getPath()+"/"+phone+"backup.vcf";
 		inflater = LayoutInflater.from(this);
 
 		mHandler = new Handler();
@@ -722,7 +730,7 @@ public class HomeContactActivity extends Activity {
 		}
 	}
 	public void doUpload(File file){
-		String phone = PropertiesUtil.read(PropertiesUtil.USER_PHONE,"110");
+
 		HttpUtils httpUtils = new HttpUtils();
 		RequestParams requestParams = new RequestParams();
 		requestParams.addBodyParameter("usertel",phone);
@@ -731,32 +739,50 @@ public class HomeContactActivity extends Activity {
 		httpUtils.send(HttpRequest.HttpMethod.POST, url,requestParams, new RequestCallBack<String>() {
 			@Override
 			public void onSuccess(ResponseInfo<String> responseInfo) {
-				LogUtils.e("onSuccess-response:"+responseInfo.statusCode);
-				LogUtils.e("onSuccess-response:"+responseInfo.reasonPhrase);
 				LogUtils.e("onSuccess-response:"+responseInfo.result);
+				try {
+					JSONObject jsonObject = new JSONObject(responseInfo.result);
+					int code = jsonObject.getInt("code");
+					if(code == 200){
+						AbToastUtil.shortShow(HomeContactActivity.this,"备份成功");
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+					AbToastUtil.shortShow(HomeContactActivity.this,"备份失败");
+				}
+
 			}
 
 			@Override
 			public void onFailure(HttpException e, String s) {
 				LogUtils.e(e.getMessage()+"onFailure-response:"+s);
+				AbToastUtil.shortShow(HomeContactActivity.this,"备份失败,请检查网络");
 			}
 		});
 	}
 	public void doGetContacts(){
-		String phone = PropertiesUtil.read(PropertiesUtil.USER_PHONE,"110");
 		HttpUtils httpUtils = new HttpUtils();
 		RequestParams requestParams = new RequestParams();
 		requestParams.addBodyParameter("usertel",phone);
 		String url = "http://tryworld.cn/index.php/Home/Appapi/getConnect";
-		httpUtils.download(url, "", requestParams, new RequestCallBack<File>() {
+		httpUtils.download(url, fileName, requestParams, new RequestCallBack<File>() {
+			@Override
+			public void onStart() {
+				super.onStart();
+				AbToastUtil.shortShow(HomeContactActivity.this,"正在从云端获取...");
+			}
+
 			@Override
 			public void onSuccess(ResponseInfo<File> responseInfo) {
-				LogUtils.e("onSuccess-response:"+responseInfo);
+				LogUtils.e("onSuccess-response:"+responseInfo.result.getName());
+				doImport();
+//				AbToastUtil.shortShow(HomeContactActivity.this,"恢复成功");
 			}
 
 			@Override
 			public void onFailure(HttpException e, String s) {
-				LogUtils.e(e.getMessage()+"onFailure-response:"+s);
+				LogUtils.e("onFailure-response: "+s+" --HttpException:  "+e.getMessage());
+				AbToastUtil.shortShow(HomeContactActivity.this,"恢复失败,请检查网络");
 			}
 		});
 	}
@@ -770,6 +796,7 @@ public class HomeContactActivity extends Activity {
 			// 判断存储卡是否存在
 			if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 				if(new File(fileName).exists()){
+					LogUtils.e("filename: "+fileName);
 					// 更新进度
 					progressDlg.show();
 					importing = "正在导入,请稍后...";

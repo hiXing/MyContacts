@@ -98,7 +98,7 @@ public class SplashActivity extends Activity {
 				&&mNameText.equals(name1)
 				*/
 				if (mPwdText.equals(mima)) {
-					AbToastUtil.longShow(SplashActivity.this, "登录成功！正在进入...");
+					AbToastUtil.shortShow(SplashActivity.this, "登录成功！正在进入...");
 					alertDialog.dismiss();
 					new Handler().postDelayed(new Runnable() {
 
