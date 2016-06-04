@@ -119,7 +119,7 @@ public class HomeContactActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		PropertiesUtil.intializePreference(this);
 		phone = PropertiesUtil.read(PropertiesUtil.USER_PHONE,"110");
-		fileName =  Environment.getExternalStorageDirectory().getPath()+"/"+phone+"backup.vcf";
+		fileName =  Environment.getExternalStorageDirectory().getPath()+"/"+phone+".vcf";
 		inflater = LayoutInflater.from(this);
 
 		mHandler = new Handler();
