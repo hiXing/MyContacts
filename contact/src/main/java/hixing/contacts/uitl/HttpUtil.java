@@ -1,5 +1,9 @@
 package hixing.contacts.uitl;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -21,6 +25,14 @@ import java.util.Set;
  * MyContacts
  */
 public class HttpUtil {
+    public static boolean isConnected(Context context){
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        manager.getActiveNetworkInfo().isConnected();
+        NetworkInfo info = manager.getActiveNetworkInfo();
+        return info!=null;
+    }
+
+
         URL url;
         HttpURLConnection conn;
         String boundary = "--------httppost123";

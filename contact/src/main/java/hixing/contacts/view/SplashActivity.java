@@ -64,7 +64,8 @@ public class SplashActivity extends Activity {
 				.setView(linearLayout)
 				.setCancelable(false)
 				.setPositiveButton("确定",null)
-				.setNeutralButton("忘记密码？",null)
+//				.setNeutralButton("忘记密码？",null)
+				.setNeutralButton("注册",null)
 				.setNegativeButton("取消",new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
@@ -78,8 +79,8 @@ public class SplashActivity extends Activity {
 		alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				BaseIntentUtil.intentDIY(SplashActivity.this,RegistActivity.class);
-				AbToastUtil.longShow(SplashActivity.this,"呵呵，重新安装软件吧！");
+				BaseIntentUtil.intentDIY(SplashActivity.this,RegistActivity.class);
+//				AbToastUtil.longShow(SplashActivity.this,"呵呵，重新安装软件吧！");
 			}
 		});
 		alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {

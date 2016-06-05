@@ -34,6 +34,7 @@ import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.GroupMembership;
 import android.provider.ContactsContract.Groups;
 import android.support.v4.app.ActivityCompat;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -69,6 +70,7 @@ import hixing.contacts.bean.ContactBean;
 import hixing.contacts.bean.GroupBean;
 import hixing.contacts.uitl.AbToastUtil;
 import hixing.contacts.uitl.BaseIntentUtil;
+import hixing.contacts.uitl.HttpUtil;
 import hixing.contacts.uitl.PropertiesUtil;
 import hixing.contacts.vcard.VCardIO;
 import hixing.contacts.view.adapter.ContactHomeAdapter;
@@ -764,14 +766,48 @@ public class HomeContactActivity extends Activity {
 		HttpUtils httpUtils = new HttpUtils();
 		RequestParams requestParams = new RequestParams();
 		requestParams.addBodyParameter("usertel",phone);
+		LogUtils.e("doGetContacts-usertel:"+phone);
 		String url = "http://tryworld.cn/index.php/Home/Appapi/getConnect";
-		httpUtils.download(url, fileName, requestParams, new RequestCallBack<File>() {
+		httpUtils.send(HttpRequest.HttpMethod.POST, url,requestParams, new RequestCallBack<String>() {
 			@Override
 			public void onStart() {
 				super.onStart();
 				AbToastUtil.shortShow(HomeContactActivity.this,"正在从云端获取...");
 			}
+			@Override
+			public void onSuccess(ResponseInfo<String> responseInfo) {
+				LogUtils.e("onSuccess-response:"+responseInfo.result);
+				try {
+					JSONObject jsonObject = new JSONObject(responseInfo.result);
+					int code = jsonObject.getInt("code");
+					if(code == 200){
+						AbToastUtil.shortShow(HomeContactActivity.this,"获取成功");
 
+						String fileUrl = jsonObject.getString("data");
+						if(!TextUtils.isEmpty(fileUrl)){
+							fileUrl = "http://tryworld.cn"+fileUrl;
+							downLoadFile(fileUrl);
+						}
+					}else if(code==202){
+						AbToastUtil.shortShow(HomeContactActivity.this,"备份文件不存在");
+					}
+				} catch (JSONException e) {
+					e.printStackTrace();
+					AbToastUtil.shortShow(HomeContactActivity.this,"获取备份通讯录失败");
+				}
+
+			}
+
+			@Override
+			public void onFailure(HttpException e, String s) {
+				LogUtils.e(e.getMessage()+"onFailure-response:"+s);
+				AbToastUtil.shortShow(HomeContactActivity.this,"获取备份文件失败,请检查网络");
+			}
+		});
+	}
+	private void downLoadFile(String fileUrl){
+		HttpUtils httpUtils = new HttpUtils();
+		httpUtils.download(fileUrl, fileName, new RequestCallBack<File>() {
 			@Override
 			public void onSuccess(ResponseInfo<File> responseInfo) {
 				LogUtils.e("onSuccess-response:"+responseInfo.result.getName());
@@ -832,6 +868,10 @@ public class HomeContactActivity extends Activity {
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3) {
+				if(!HttpUtil.isConnected(HomeContactActivity.this)){
+					AbToastUtil.shortShow(HomeContactActivity.this,"请检查网络");
+					return;
+				}
 				if (position == 0) {// 从sd恢复联系人信息
 					doImport();
 					// 恢复成功初始化联系人
